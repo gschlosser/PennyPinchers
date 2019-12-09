@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from models import db
 from controllers import auth_blueprint
 from services.auth_services import create_user
+from controllers import auth_controller
+from services import bcrypt
 
 
 app = Flask(__name__)
@@ -11,6 +13,7 @@ app = Flask(__name__)
 app.config.from_object('config.Development')
 
 db.init_app(app)
+bcrypt.init_app(app)
 
 
 @app.route('/', methods = ['GET'])
