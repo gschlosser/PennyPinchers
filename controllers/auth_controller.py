@@ -1,9 +1,9 @@
-from flask import Flask, Blueprint, render_template, request, redirect, Response
+from flask import Flask, Blueprint, render_template, request, redirect, Response, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_raw_jwt
 from models.user_model import Users
 from services.auth_services import create_user
 from services import bcrypt
-from . import jwt
+from . import jwt, blacklist
 
 
 auth_blueprint = Blueprint('auth_api', __name__)
@@ -21,7 +21,7 @@ def login():
     if check_if_pw_matches:
         access_token = create_access_token(check_if_user_exists.id)
         return {
-            'message': 'You have logged in as ',
+            'message': 'You have logged in.',
             'Your login token is': access_token
         }
     else: 
@@ -39,6 +39,19 @@ def register():
         except Exception as e:
             return str(e), 400
         return {'message': 'Thank you for registering to PennyPinchers!'}
+
+
+@jwt.token_in_blacklist_loader
+def check_if_token_in_blacklist(decrypted_token):
+    jti = decrypted_token['jti']
+    return jti in blacklist
+
+@auth_blueprint.route('/logout', methods=['POST'])
+@jwt_required
+def logout():
+    jti = get_raw_jwt()['jti']
+    blacklist.add(jti)
+    return jsonify({"msg": "Successfully logged out"}), 200
 
 
 @auth_blueprint.route('/user_details', methods=['POST'])
