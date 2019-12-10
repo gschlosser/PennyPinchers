@@ -3,6 +3,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_raw_jwt
 from models.user_model import Users
 from services.auth_services import create_user
 from services import bcrypt
+from . import jwt
 
 
 auth_blueprint = Blueprint('auth_api', __name__)
