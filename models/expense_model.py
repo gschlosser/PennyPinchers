@@ -27,6 +27,10 @@ class Expenses(db.Model):
         db.session.commit()
         return jsonify({'message':'Expense added'})
 
+    @staticmethod
+    def grab_all_items(id):
+        return Expenses.query.filter_by(user_id=id)
+
 class ExpenseSchema(Schema):
     id = fields.Int(dump_only=True)
     user_id = fields.Int(required=True)
@@ -36,4 +40,6 @@ class ExpenseSchema(Schema):
     expense_category = fields.Str(required=True)
     date_created = fields.DateTime(dump_only=True)
     last_modified = fields.DateTime(dump_only=True)
+
+
     
