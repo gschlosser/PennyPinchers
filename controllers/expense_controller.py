@@ -26,4 +26,6 @@ def view_items():
 
 # @expense_blueprint.route('/view_trends', methods=['GET', 'POST'])
 # def view_trends():
-    
+    #pie chart for single days up to a week
+    #linear graph for anything more than a week
+    #use mpld3 to embed matplotlib graph in web page
